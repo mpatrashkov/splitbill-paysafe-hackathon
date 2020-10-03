@@ -9,12 +9,12 @@ import {
 import { RootStackParamList } from "./types/navigation"
 import { NavigationContainer } from "@react-navigation/native"
 import { LoginPage } from "./components/pages/LoginPage"
+import { RegisterPage } from "./components/pages/RegisterPage"
 
 const Stack = createStackNavigator<RootStackParamList>()
 
 const screenOptions = {
     ...TransitionPresets.FadeFromBottomAndroid,
-    headerShown: false,
 }
 
 export default function App() {
@@ -25,6 +25,14 @@ export default function App() {
                 <Stack.Screen
                     name="Login"
                     component={LoginPage}
+                    options={{
+                        ...screenOptions,
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="Register"
+                    component={RegisterPage}
                     options={screenOptions}
                 />
             </Stack.Navigator>
