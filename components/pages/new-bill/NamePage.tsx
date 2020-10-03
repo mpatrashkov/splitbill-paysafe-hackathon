@@ -3,8 +3,8 @@ import { View, Text, StyleSheet } from "react-native"
 import { Layout, Typography, Form } from "../../../styles"
 import { TextInput } from "react-native-gesture-handler"
 import { CustomButton } from "../../CustomButton"
-import { NewBillContext } from "../NewBillPage"
 import { NewBillStackNavigationProps } from "../../../types/navigation"
+import { NewBillContext } from "../../../state/newBill"
 
 export const NamePage: FunctionComponent<NewBillStackNavigationProps<
     "Name"

@@ -1,7 +1,6 @@
 import axios from "axios"
 import React, { FunctionComponent, useContext, useState } from "react"
 import { View, Text, StyleSheet, FlatList, CheckBox } from "react-native"
-import { NewBillContext } from "../NewBillPage"
 import { Colours, Layout } from "../../../styles"
 import { TextInput } from "react-native-gesture-handler"
 
@@ -12,6 +11,7 @@ import { authHeaders } from "../../../lib/headers"
 import { BillPerson } from "../../BillPerson"
 import { CustomButton } from "../../CustomButton"
 import { NewBillStackNavigationProps } from "../../../types/navigation"
+import { NewBillContext } from "../../../state/newBill"
 
 let timeout: number | null = null
 
@@ -123,13 +123,25 @@ export const PeoplePage: FunctionComponent<NewBillStackNavigationProps<
         }, 300)
     }
 
-    const onFinishClick = () => {
+    const onFinishClick = async () => {
+        const headers = await authHeaders()
+
         splitBillApi
-            .post("/bills", {
-                name: state.name,
-                participants: state.users.map((user) => user.id),
+            .post(
+                "/bills",
+                {
+                    name: state.name,
+                    participants: state.users.map((user) => user.id),
+                },
+                {
+                    headers,
+                }
+            )
+            .then(({ data }) => {
+                navigation.navigate("Bill", {
+                    id: data.id,
+                })
             })
-            .then(({ data }) => {})
     }
 
     return (

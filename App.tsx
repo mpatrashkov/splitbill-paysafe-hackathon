@@ -11,6 +11,7 @@ import { LoginPage } from "./components/pages/LoginPage"
 import { RegisterPage } from "./components/pages/RegisterPage"
 import { HomePage } from "./components/pages/HomePage"
 import { NewBillPage } from "./components/pages/NewBillPage"
+import { BillPage } from "./components/pages/BillPage"
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -30,6 +31,11 @@ export default function App() {
                         ...screenOptions,
                         headerShown: false,
                     }}
+                />
+                <Stack.Screen
+                    name="Bill"
+                    component={BillPage}
+                    options={screenOptions}
                 />
                 <Stack.Screen
                     name="Register"
