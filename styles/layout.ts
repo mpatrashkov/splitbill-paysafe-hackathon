@@ -14,4 +14,6 @@ export const container = {
 export const verticalCenterContainer = {
     ...centerContainer,
     justifyContent: "center" as const,
+    flex: 1,
+    marginTop: -100,
 }

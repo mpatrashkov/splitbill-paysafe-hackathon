@@ -6,6 +6,7 @@ export type RootStackParamList = {
     Home: undefined
     Login: undefined
     Register: undefined
+    NewBill: undefined
 }
 
 export type HomeTabsParamList = {
@@ -24,3 +25,13 @@ export type HomeTabsNavigationProps<T extends keyof HomeTabsParamList> = {
         StackNavigationProp<RootStackParamList>
     >
 }
+
+export type NewBillStackParamList = {
+    Name: undefined
+    People: undefined
+    Search: undefined
+}
+
+export type NewBillStackNavigationProps<
+    T extends keyof NewBillStackParamList
+> = StackScreenProps<NewBillStackParamList, T>

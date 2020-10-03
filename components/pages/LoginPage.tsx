@@ -1,8 +1,16 @@
 import React, { FunctionComponent, useState } from "react"
-import { View, Text, StyleSheet, TextInput, Image } from "react-native"
+import {
+    View,
+    Text,
+    StyleSheet,
+    TextInput,
+    Image,
+    AsyncStorage,
+} from "react-native"
 import { RootStackNavigationProps } from "../../types/navigation"
 import { CustomButton } from "../CustomButton"
 import { Typography, Form, Layout } from "../../styles"
+import { splitBillApi } from "../../http/splitBillApi"
 
 export const LoginPage: FunctionComponent<RootStackNavigationProps<
     "Login"
@@ -14,7 +22,21 @@ export const LoginPage: FunctionComponent<RootStackNavigationProps<
         navigation.navigate("Register")
     }
 
-    const onLoginClick = () => {}
+    const onLoginClick = () => {
+        splitBillApi
+            .post("/auth/login", {
+                email,
+                password,
+            })
+            .then(({ data }) => {
+                if (data.error) {
+                    console.log("Nanovo")
+                } else {
+                    navigation.navigate("Home")
+                    AsyncStorage.setItem("@jwt", data.user.token)
+                }
+            })
+    }
 
     return (
         <View style={styles.container}>
@@ -28,7 +50,7 @@ export const LoginPage: FunctionComponent<RootStackNavigationProps<
             <TextInput
                 value={password}
                 onChangeText={(text) => setPassword(text)}
-                style={{ ...Form.wideInput }}
+                style={Form.wideInput}
                 placeholder="Password"
             />
             <CustomButton

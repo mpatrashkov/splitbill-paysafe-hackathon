@@ -1,20 +1,59 @@
-import React, { FunctionComponent } from "react"
+import React, { FunctionComponent, useState } from "react"
 import { View, Text, StyleSheet, TextInput, Image } from "react-native"
 import { Form, Layout, Typography } from "../../styles"
 import { CustomButton } from "../CustomButton"
+import { splitBillApi } from "../../http/splitBillApi"
+import { RootStackNavigationProps } from "../../types/navigation"
 
-export const RegisterPage: FunctionComponent<{}> = () => {
+export const RegisterPage: FunctionComponent<RootStackNavigationProps<
+    "Register"
+>> = ({ navigation }) => {
+    const [email, setEmail] = useState("testmashin@test.com")
+    const [name, setName] = useState("John Doe")
+    const [password, setPassword] = useState("test123")
+
+    const onRegisterClick = () => {
+        splitBillApi
+            .post("/auth/register", {
+                email,
+                name,
+                password,
+            })
+            .then(({ data }) => {
+                if (data.error) {
+                    console.log("Nanovo")
+                } else {
+                    navigation.navigate("Home")
+                }
+            })
+    }
+
     return (
         <View style={styles.container}>
             <Image source={require("../../img/logo.png")} style={styles.logo} />
-            <TextInput style={styles.input} placeholder="Name" />
-            <TextInput style={styles.input} placeholder="Email address" />
-            <TextInput style={styles.input} placeholder="Password" />
+            <TextInput
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                style={styles.input}
+                placeholder="Name"
+            />
+            <TextInput
+                value={name}
+                onChangeText={(text) => setName(text)}
+                style={styles.input}
+                placeholder="Email address"
+            />
+            <TextInput
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                style={styles.input}
+                placeholder="Password"
+            />
             <CustomButton
                 style={styles.register}
                 colour="primary"
                 text="Register"
-                onPress={() => {}}
+                onPress={onRegisterClick}
                 fullWidth
             />
             <Text>

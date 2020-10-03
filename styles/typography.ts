@@ -15,3 +15,8 @@ export const sectionHeader = {
     fontSize: 32,
     fontWeight: "bold" as const,
 }
+
+export const big = {
+    fontSize: 32,
+    fontWeight: "bold" as const,
+}

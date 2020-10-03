@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react"
 import { View, Text } from "react-native"
-import { Typography, Layout } from "../../styles"
+import { Typography, Layout } from "../../../styles"
 
 export const NotificationsPage: FunctionComponent = () => {
     return (

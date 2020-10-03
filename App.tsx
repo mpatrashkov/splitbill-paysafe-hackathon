@@ -10,6 +10,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import { LoginPage } from "./components/pages/LoginPage"
 import { RegisterPage } from "./components/pages/RegisterPage"
 import { HomePage } from "./components/pages/HomePage"
+import { NewBillPage } from "./components/pages/NewBillPage"
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -23,8 +24,8 @@ export default function App() {
             <StatusBar />
             <Stack.Navigator>
                 <Stack.Screen
-                    name="Home"
-                    component={HomePage}
+                    name="NewBill"
+                    component={NewBillPage}
                     options={{
                         ...screenOptions,
                         headerShown: false,
@@ -33,6 +34,14 @@ export default function App() {
                 <Stack.Screen
                     name="Login"
                     component={LoginPage}
+                    options={{
+                        ...screenOptions,
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="Home"
+                    component={HomePage}
                     options={{
                         ...screenOptions,
                         headerShown: false,

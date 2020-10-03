@@ -2,9 +2,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import React, { FunctionComponent } from "react"
 
 import { Ionicons } from "@expo/vector-icons"
-import { NotificationsPage } from "./NotificationsPage"
-import { SettingsPage } from "./SettingsPage"
-import { BillsPage } from "./BillsPage"
+import { NotificationsPage } from "./home/NotificationsPage"
+import { SettingsPage } from "./home/SettingsPage"
+import { BillsPage } from "./home/BillsPage"
 
 const Tab = createBottomTabNavigator()
 

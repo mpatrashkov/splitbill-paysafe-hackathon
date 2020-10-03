@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react"
 import { View, Text, StyleSheet } from "react-native"
-import { Typography, Layout } from "../../styles"
-import { BillOverview } from "../BillOverview"
-import { CustomButton } from "../CustomButton"
+import { Typography, Layout } from "../../../styles"
+import { BillOverview } from "../../BillOverview"
+import { CustomButton } from "../../CustomButton"
 import { ScrollView } from "react-native-gesture-handler"
 
 export const BillsPage: FunctionComponent = () => {
