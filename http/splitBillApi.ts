@@ -1,5 +1,5 @@
 import axios from "axios"
 
 export const splitBillApi = axios.create({
-    baseURL: "http://wethebest.asuscomm.com",
+    baseURL: "http://79.132.1.52",
 })

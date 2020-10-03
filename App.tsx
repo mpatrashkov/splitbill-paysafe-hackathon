@@ -32,6 +32,11 @@ export default function App() {
                     }}
                 />
                 <Stack.Screen
+                    name="Register"
+                    component={RegisterPage}
+                    options={screenOptions}
+                />
+                <Stack.Screen
                     name="Login"
                     component={LoginPage}
                     options={{
@@ -46,11 +51,6 @@ export default function App() {
                         ...screenOptions,
                         headerShown: false,
                     }}
-                />
-                <Stack.Screen
-                    name="Register"
-                    component={RegisterPage}
-                    options={screenOptions}
                 />
             </Stack.Navigator>
         </NavigationContainer>

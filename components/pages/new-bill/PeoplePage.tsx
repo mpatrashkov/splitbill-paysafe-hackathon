@@ -1,6 +1,6 @@
 import axios from "axios"
 import React, { FunctionComponent, useContext, useState } from "react"
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, FlatList, CheckBox } from "react-native"
 import { NewBillContext } from "../NewBillPage"
 import { Colours, Layout } from "../../../styles"
 import { TextInput } from "react-native-gesture-handler"
@@ -9,13 +9,91 @@ import { Ionicons } from "@expo/vector-icons"
 import { splitBillApi } from "../../../http/splitBillApi"
 import { User } from "../../../types/user"
 import { authHeaders } from "../../../lib/headers"
+import { BillPerson } from "../../BillPerson"
+import { CustomButton } from "../../CustomButton"
+import { NewBillStackNavigationProps } from "../../../types/navigation"
 
 let timeout: number | null = null
 
-export const PeoplePage: FunctionComponent = () => {
+const Person: FunctionComponent<{
+    name: string
+    checked: boolean
+    onChange: (value: boolean) => void
+}> = ({ name, checked, onChange }) => {
+    return (
+        <View style={personStyles.container}>
+            <BillPerson size={40} />
+            <Text style={personStyles.name}>{name}</Text>
+            <View style={personStyles.checkboxContainer}>
+                <CheckBox value={checked} onValueChange={onChange} />
+            </View>
+        </View>
+    )
+}
+
+const personStyles = StyleSheet.create({
+    container: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    name: {
+        marginLeft: 10,
+        fontSize: 20,
+        fontWeight: "bold",
+        marginVertical: 10,
+    },
+    checkbox: {
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+    },
+    checkboxContainer: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "flex-end",
+    },
+})
+
+export const PeoplePage: FunctionComponent<NewBillStackNavigationProps<
+    "People"
+>> = ({ navigation }) => {
     const { state, dispatch } = useContext(NewBillContext)
 
+    // const [selected, setSelected] = useState<User[]>([])
     const [results, setResults] = useState<User[]>([])
+
+    const onPersonSelectChange = (user: User, value: boolean) => {
+        // if (value) {
+        //     setSelected([...selected, user])
+        // } else {
+        //     setSelected(
+        //         selected.filter((selectedUser) => selectedUser.id !== user.id)
+        //     )
+        // }
+        if (value) {
+            dispatch({
+                type: "ADD_USER",
+                payload: {
+                    user,
+                },
+            })
+        } else {
+            dispatch({
+                type: "REMOVE_USER",
+                payload: {
+                    user,
+                },
+            })
+        }
+    }
+
+    const deselectedUsers = () => {
+        const a = results.filter((result) => {
+            return !state.users.find((user) => user.id === result.id)
+        })
+
+        return a
+    }
 
     const onSearchChange = (text: string) => {
         if (timeout) {
@@ -23,6 +101,7 @@ export const PeoplePage: FunctionComponent = () => {
         }
 
         if (!text) {
+            setResults([])
             return
         }
 
@@ -39,10 +118,18 @@ export const PeoplePage: FunctionComponent = () => {
                     },
                 })
                 .then(({ data }) => {
-                    console.log(data)
                     setResults(data)
                 })
         }, 300)
+    }
+
+    const onFinishClick = () => {
+        splitBillApi
+            .post("/bills", {
+                name: state.name,
+                participants: state.users.map((user) => user.id),
+            })
+            .then(({ data }) => {})
     }
 
     return (
@@ -56,10 +143,41 @@ export const PeoplePage: FunctionComponent = () => {
                 />
             </View>
             <View>
-                {results.map((result) => (
-                    <Text key={result.id}>{result.name}</Text>
-                ))}
+                <FlatList
+                    data={state.users}
+                    renderItem={(item) => (
+                        <Person
+                            name={item.item.name}
+                            checked
+                            onChange={(value) =>
+                                onPersonSelectChange(item.item, value)
+                            }
+                        />
+                    )}
+                    keyExtractor={(item) => item.id.toString()}
+                    style={styles.selected}
+                />
+
+                <FlatList
+                    data={deselectedUsers()}
+                    renderItem={(item) => (
+                        <Person
+                            name={item.item.name}
+                            checked={false}
+                            onChange={(value) =>
+                                onPersonSelectChange(item.item, value)
+                            }
+                        />
+                    )}
+                    keyExtractor={(item) => item.id.toString()}
+                />
             </View>
+            <CustomButton
+                colour="primary"
+                text="Finish"
+                onPress={onFinishClick}
+                type="fab"
+            />
         </View>
     )
 }
@@ -76,5 +194,12 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         height: 40,
         flex: 1,
+    },
+    selected: {
+        borderBottomWidth: 1,
+        borderBottomColor: Colours.primary,
+        paddingBottom: 20,
+        marginBottom: 20,
+        marginTop: 20,
     },
 })

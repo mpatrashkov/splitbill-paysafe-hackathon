@@ -2,21 +2,26 @@ import React, { FunctionComponent } from "react"
 import { View, StyleSheet, Text } from "react-native"
 
 export const BillPerson: FunctionComponent<{
-    style?: Record<string, unknown>
-}> = ({ style }) => {
+    style?: Object
+    size?: number
+}> = ({ style, size = 30 }) => {
     return (
         <View
             style={{
                 ...styles.billPerson,
                 ...style,
+                width: size,
+                height: size,
+                borderRadius: size / 2,
             }}
         >
             <Text
                 style={{
                     color: "white",
+                    fontSize: size / 2.5,
                 }}
             >
-                H
+                MP
             </Text>
         </View>
     )
@@ -24,10 +29,7 @@ export const BillPerson: FunctionComponent<{
 
 const styles = StyleSheet.create({
     billPerson: {
-        width: 30,
-        height: 30,
         elevation: 3,
-        borderRadius: 15,
         backgroundColor: "#0097A7",
         color: "white",
         alignItems: "center",
