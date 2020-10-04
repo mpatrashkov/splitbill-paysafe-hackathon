@@ -12,6 +12,7 @@ import { RegisterPage } from "./components/pages/RegisterPage"
 import { HomePage } from "./components/pages/HomePage"
 import { NewBillPage } from "./components/pages/NewBillPage"
 import { BillPage } from "./components/pages/BillPage"
+import { AddTransactionPage } from "./components/pages/AddTransactionPage"
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -25,17 +26,30 @@ export default function App() {
             <StatusBar />
             <Stack.Navigator>
                 <Stack.Screen
-                    name="NewBill"
-                    component={NewBillPage}
+                    name="Home"
+                    component={HomePage}
                     options={{
                         ...screenOptions,
                         headerShown: false,
                     }}
                 />
                 <Stack.Screen
+                    name="AddTransaction"
+                    component={AddTransactionPage}
+                    options={screenOptions}
+                />
+                <Stack.Screen
                     name="Bill"
                     component={BillPage}
                     options={screenOptions}
+                />
+                <Stack.Screen
+                    name="NewBill"
+                    component={NewBillPage}
+                    options={{
+                        ...screenOptions,
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
                     name="Register"
@@ -45,14 +59,6 @@ export default function App() {
                 <Stack.Screen
                     name="Login"
                     component={LoginPage}
-                    options={{
-                        ...screenOptions,
-                        headerShown: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="Home"
-                    component={HomePage}
                     options={{
                         ...screenOptions,
                         headerShown: false,

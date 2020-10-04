@@ -10,6 +10,9 @@ export type RootStackParamList = {
     Bill: {
         id: number
     }
+    AddTransaction: {
+        id: number
+    }
 }
 
 export type HomeTabsParamList = {
