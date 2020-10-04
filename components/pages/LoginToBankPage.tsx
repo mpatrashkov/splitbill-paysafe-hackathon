@@ -8,8 +8,10 @@ import { Text } from "react-native"
 export const LoginToBankPage: FunctionComponent<RootStackNavigationProps<
     "LoginToBank"
 >> = ({ route, navigation }) => {
-    useSocketChannel("bank", (message) => {
+    const { unsubscribe } = useSocketChannel("bank", (message) => {
         if (message.type === "authenticated") {
+            console.log(message)
+            unsubscribe()
             navigation.replace("Home")
         }
     })
@@ -19,8 +21,7 @@ export const LoginToBankPage: FunctionComponent<RootStackNavigationProps<
     return (
         <WebView
             source={{
-                uri:
-                    "https://identity.dskbank.bg/connect/authorize?response_type=code&client_id=5c465f40-2b83-4fc3-a536-66b02eede727&redirect_uri=http://wethebest.asuscomm.com/bank/dsk/success&scope=ais.sandbox&state=18de6fd8-904b-4292-8e55-d8bf75edf47b",
+                uri: route.params.url,
             }}
         />
     )

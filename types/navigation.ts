@@ -17,6 +17,9 @@ export type RootStackParamList = {
     LoginToBank: {
         url: string
     }
+    SplitBill: {
+        id: number
+    }
 }
 
 export type HomeTabsParamList = {

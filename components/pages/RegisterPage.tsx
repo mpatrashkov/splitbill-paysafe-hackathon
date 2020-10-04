@@ -1,16 +1,26 @@
 import React, { FunctionComponent, useState } from "react"
-import { View, Text, StyleSheet, TextInput, Image } from "react-native"
+import {
+    View,
+    Text,
+    StyleSheet,
+    TextInput,
+    Image,
+    AsyncStorage,
+} from "react-native"
 import { Form, Layout, Typography } from "../../styles"
 import { CustomButton } from "../CustomButton"
 import { splitBillApi } from "../../http/splitBillApi"
 import { RootStackNavigationProps } from "../../types/navigation"
+import { useSocketChannel } from "../../lib/socket"
 
 export const RegisterPage: FunctionComponent<RootStackNavigationProps<
     "Register"
 >> = ({ navigation }) => {
-    const [email, setEmail] = useState("testmashin@test.com")
-    const [name, setName] = useState("John Doe")
-    const [password, setPassword] = useState("test123")
+    const [email, setEmail] = useState("")
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
+
+    const { emit } = useSocketChannel("authenticate")
 
     const onRegisterClick = () => {
         splitBillApi
@@ -23,7 +33,12 @@ export const RegisterPage: FunctionComponent<RootStackNavigationProps<
                 if (data.error) {
                     console.log("Nanovo")
                 } else {
-                    navigation.navigate("Home")
+                    console.log(data)
+                    AsyncStorage.setItem("@jwt", data.user.token)
+                    emit({
+                        token: data.user.token,
+                    })
+                    navigation.navigate("LinkAccount")
                 }
             })
     }
@@ -35,18 +50,19 @@ export const RegisterPage: FunctionComponent<RootStackNavigationProps<
                 value={email}
                 onChangeText={(text) => setEmail(text)}
                 style={styles.input}
-                placeholder="Name"
+                placeholder="Email address"
             />
             <TextInput
                 value={name}
                 onChangeText={(text) => setName(text)}
                 style={styles.input}
-                placeholder="Email address"
+                placeholder="Name"
             />
             <TextInput
                 value={password}
                 onChangeText={(text) => setPassword(text)}
                 style={styles.input}
+                secureTextEntry={true}
                 placeholder="Password"
             />
             <CustomButton

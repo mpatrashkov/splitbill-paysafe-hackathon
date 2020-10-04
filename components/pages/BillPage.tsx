@@ -34,6 +34,12 @@ export const BillPage: FunctionComponent<RootStackNavigationProps<"Bill">> = ({
         })
     }
 
+    const onSplitClick = () => {
+        navigation.push("SplitBill", {
+            id: route.params.id,
+        })
+    }
+
     return (
         <View style={Layout.centerContainer}>
             <View style={styles.details}>
@@ -57,7 +63,7 @@ export const BillPage: FunctionComponent<RootStackNavigationProps<"Bill">> = ({
                     <CustomButton
                         colour="primary"
                         text="Split"
-                        onPress={() => {}}
+                        onPress={onSplitClick}
                         style={styles.button}
                     />
                 </View>

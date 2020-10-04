@@ -119,6 +119,11 @@ export const PeoplePage: FunctionComponent<NewBillStackNavigationProps<
     const onFinishClick = async () => {
         const headers = await authHeaders()
 
+        console.log({
+            name: state.name,
+            participants: state.users.map((user) => user.id),
+        })
+
         splitBillApi
             .post(
                 "/bills",

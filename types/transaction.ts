@@ -7,4 +7,7 @@ export type Transaction = {
     amount: number
     description: string
     user: User
+    bankId?: string
+    accountName?: string
+    date: string
 }

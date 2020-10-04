@@ -14,7 +14,7 @@ export const startWebSocket = () => {
 
 export const useSocketChannel = (
     channel: string,
-    handler: (message: any) => any,
+    handler?: (message: any) => any,
     saveMessages: boolean = false
 ) => {
     let messages: Object[] = [],
@@ -26,17 +26,19 @@ export const useSocketChannel = (
         setMessages = _setMessages
     }
 
-    useEffect(() => {
-        const callback = (message: string) => {
-            const obj = JSON.parse(message)
+    const callback = (message: any) => {
+        const obj = message
 
-            if (saveMessages) {
-                setMessages([...messages, obj])
-            }
-
-            handler(obj)
+        if (saveMessages) {
+            setMessages([...messages, obj])
         }
 
+        if (handler) {
+            handler(obj)
+        }
+    }
+
+    useEffect(() => {
         socket.on(channel, callback)
 
         return () => {
@@ -46,8 +48,11 @@ export const useSocketChannel = (
 
     return {
         messages,
-        emit(message: string) {
+        emit(message: any) {
             socket.emit(channel, message)
+        },
+        unsubscribe() {
+            socket.off(channel, callback)
         },
     }
 }

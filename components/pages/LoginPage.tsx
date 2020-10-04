@@ -11,12 +11,15 @@ import { RootStackNavigationProps } from "../../types/navigation"
 import { CustomButton } from "../CustomButton"
 import { Typography, Form, Layout } from "../../styles"
 import { splitBillApi } from "../../http/splitBillApi"
+import { useSocketChannel } from "../../lib/socket"
 
 export const LoginPage: FunctionComponent<RootStackNavigationProps<
     "Login"
 >> = ({ navigation }) => {
     const [email, setEmail] = useState("test@test.com")
     const [password, setPassword] = useState("test123")
+
+    const { emit } = useSocketChannel("authenticate")
 
     const onRegisterRedirect = () => {
         navigation.navigate("Register")
@@ -32,8 +35,11 @@ export const LoginPage: FunctionComponent<RootStackNavigationProps<
                 if (data.error) {
                     console.log("Nanovo")
                 } else {
-                    navigation.navigate("Home")
                     AsyncStorage.setItem("@jwt", data.user.token)
+                    emit({
+                        token: data.user.token,
+                    })
+                    navigation.navigate("Home")
                 }
             })
     }
@@ -51,6 +57,7 @@ export const LoginPage: FunctionComponent<RootStackNavigationProps<
                 value={password}
                 onChangeText={(text) => setPassword(text)}
                 style={Form.wideInput}
+                secureTextEntry={true}
                 placeholder="Password"
             />
             <CustomButton

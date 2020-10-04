@@ -14,6 +14,7 @@ import { Colours } from "../../styles"
 import { CustomButton } from "../CustomButton"
 import { authHeaders } from "../../lib/headers"
 import { splitBillApi } from "../../http/splitBillApi"
+import { splitBillBaseUrl } from "../../config"
 
 export const BankListItem: FunctionComponent<{
     bankInfo: BankInfo
@@ -24,7 +25,7 @@ export const BankListItem: FunctionComponent<{
             <View style={bankListItemStyles.container}>
                 <Image
                     source={{
-                        uri: bankInfo.image,
+                        uri: `${splitBillBaseUrl}/logos/${bankInfo.image}`,
                     }}
                     style={bankListItemStyles.image}
                 />
@@ -75,19 +76,19 @@ export const LinkAccountPage: FunctionComponent<RootStackNavigationProps<
 
     const banksInfo: BankInfo[] = [
         {
+            id: "dsk",
+            image: "dsk_logo.png",
+            name: "DSK Bank",
+        },
+        {
             id: "fibank",
             image: "fibank_logo.png",
             name: "Fibank",
         },
         {
             id: "unicredit",
-            image: "unicredit_logo.jpg",
+            image: "unicredit_logo.png",
             name: "Unicredit Bulbank",
-        },
-        {
-            id: "dsk",
-            image: "dsk_logo.png",
-            name: "DSK Bank",
         },
         {
             id: "reif",

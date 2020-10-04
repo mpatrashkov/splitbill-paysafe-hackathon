@@ -1,27 +1,44 @@
 import React, { FunctionComponent } from "react"
-import { View, StyleSheet, Text } from "react-native"
+import { View, StyleSheet, Text, Image } from "react-native"
 import { Colours } from "../styles"
 import { BillPerson } from "./BillPerson"
 import { Transaction } from "../types/transaction"
+import { splitBillBaseUrl } from "../config"
+import moment from "moment"
+import { PressEvent } from "../types/types"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 export const TransactionCard: FunctionComponent<{
     transaction: Transaction
-}> = ({ transaction }) => {
+    ownTransaction?: boolean
+    onPress?: PressEvent
+}> = ({ transaction, ownTransaction = false, onPress }) => {
     return (
-        <View style={styles.container}>
-            <BillPerson
-                style={styles.image}
-                size={50}
-                user={transaction.user}
-            />
+        <TouchableOpacity style={styles.container} onPress={onPress}>
+            {!ownTransaction ? (
+                <BillPerson
+                    style={styles.image}
+                    size={50}
+                    user={transaction.user}
+                />
+            ) : (
+                <Image
+                    source={{
+                        uri: `${splitBillBaseUrl}/logos/${transaction.bankId}_logo.png`,
+                    }}
+                    style={styles.bankImage}
+                />
+            )}
             <View style={styles.name}>
-                <Text style={styles.title}>NETFLIX INC</Text>
-                <Text style={styles.amount}>14.05$</Text>
+                <Text style={styles.title}>{transaction.description}</Text>
+                <Text style={styles.amount}>{transaction.amount}лв.</Text>
             </View>
             <View>
-                <Text style={styles.amount}>1h</Text>
+                <Text style={styles.amount}>
+                    {moment(transaction.date).fromNow()}
+                </Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -36,6 +53,11 @@ const styles = StyleSheet.create({
     },
     image: {
         marginRight: 15,
+    },
+    bankImage: {
+        marginRight: 15,
+        width: 50,
+        height: 50,
     },
     title: {
         fontSize: 20,
