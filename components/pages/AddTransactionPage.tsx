@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react"
 import { View, Text, SectionList, StyleSheet } from "react-native"
 import { RootStackNavigationProps } from "../../types/navigation"
-import { Transaction } from "../Transaction"
+import { TransactionCard } from "../Transaction"
 import { Layout } from "../../styles"
 
 const SectionHeader: FunctionComponent<{
@@ -46,7 +46,7 @@ export const AddTransactionPage: FunctionComponent<RootStackNavigationProps<
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.transaction}>
-                        <Transaction />
+                        <TransactionCard />
                     </View>
                 )}
                 renderSectionHeader={({ section: { title } }) => (

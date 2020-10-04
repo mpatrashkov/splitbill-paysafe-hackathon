@@ -13,6 +13,10 @@ export type RootStackParamList = {
     AddTransaction: {
         id: number
     }
+    LinkAccount: undefined
+    LoginToBank: {
+        url: string
+    }
 }
 
 export type HomeTabsParamList = {

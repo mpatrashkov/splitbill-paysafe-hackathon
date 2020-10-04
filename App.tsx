@@ -13,6 +13,9 @@ import { HomePage } from "./components/pages/HomePage"
 import { NewBillPage } from "./components/pages/NewBillPage"
 import { BillPage } from "./components/pages/BillPage"
 import { AddTransactionPage } from "./components/pages/AddTransactionPage"
+import { LinkAccountPage } from "./components/pages/LinkAccountPage"
+import { LoginToBankPage } from "./components/pages/LoginToBankPage"
+import { startWebSocket } from "./lib/socket"
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -20,11 +23,31 @@ const screenOptions = {
     ...TransitionPresets.FadeFromBottomAndroid,
 }
 
+startWebSocket()
+
 export default function App() {
     return (
         <NavigationContainer>
             <StatusBar />
             <Stack.Navigator>
+                <Stack.Screen
+                    name="LinkAccount"
+                    component={LinkAccountPage}
+                    options={screenOptions}
+                />
+                <Stack.Screen
+                    name="LoginToBank"
+                    component={LoginToBankPage}
+                    options={screenOptions}
+                />
+                <Stack.Screen
+                    name="Login"
+                    component={LoginPage}
+                    options={{
+                        ...screenOptions,
+                        headerShown: false,
+                    }}
+                />
                 <Stack.Screen
                     name="Home"
                     component={HomePage}
@@ -55,14 +78,6 @@ export default function App() {
                     name="Register"
                     component={RegisterPage}
                     options={screenOptions}
-                />
-                <Stack.Screen
-                    name="Login"
-                    component={LoginPage}
-                    options={{
-                        ...screenOptions,
-                        headerShown: false,
-                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

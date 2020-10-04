@@ -1,10 +1,18 @@
 import React, { FunctionComponent } from "react"
 import { View, StyleSheet, Text } from "react-native"
+import { User } from "../types/user"
 
 export const BillPerson: FunctionComponent<{
     style?: Object
     size?: number
-}> = ({ style, size = 30 }) => {
+    user: User
+}> = ({ style, size = 30, user }) => {
+    let initials = ""
+
+    for (let word of user.name.split(" ")) {
+        initials += word[0].toUpperCase()
+    }
+
     return (
         <View
             style={{
@@ -21,7 +29,7 @@ export const BillPerson: FunctionComponent<{
                     fontSize: size / 2.5,
                 }}
             >
-                MP
+                {initials}
             </Text>
         </View>
     )

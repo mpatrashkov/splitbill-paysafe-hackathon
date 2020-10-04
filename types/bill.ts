@@ -1,4 +1,5 @@
 import { User } from "./user"
+import { Transaction } from "./transaction"
 
 export type Bill = {
     id: number
@@ -6,4 +7,5 @@ export type Bill = {
     amount: number
     participants: number
     users: User[]
+    transactions: Transaction[]
 }

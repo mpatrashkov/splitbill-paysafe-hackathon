@@ -16,14 +16,14 @@ import { NewBillContext } from "../../../state/newBill"
 let timeout: number | null = null
 
 const Person: FunctionComponent<{
-    name: string
+    user: User
     checked: boolean
     onChange: (value: boolean) => void
-}> = ({ name, checked, onChange }) => {
+}> = ({ user, checked, onChange }) => {
     return (
         <View style={personStyles.container}>
-            <BillPerson size={40} />
-            <Text style={personStyles.name}>{name}</Text>
+            <BillPerson size={40} user={user} />
+            <Text style={personStyles.name}>{user.name}</Text>
             <View style={personStyles.checkboxContainer}>
                 <CheckBox value={checked} onValueChange={onChange} />
             </View>
@@ -58,18 +58,9 @@ export const PeoplePage: FunctionComponent<NewBillStackNavigationProps<
     "People"
 >> = ({ navigation }) => {
     const { state, dispatch } = useContext(NewBillContext)
-
-    // const [selected, setSelected] = useState<User[]>([])
     const [results, setResults] = useState<User[]>([])
 
     const onPersonSelectChange = (user: User, value: boolean) => {
-        // if (value) {
-        //     setSelected([...selected, user])
-        // } else {
-        //     setSelected(
-        //         selected.filter((selectedUser) => selectedUser.id !== user.id)
-        //     )
-        // }
         if (value) {
             dispatch({
                 type: "ADD_USER",
@@ -118,7 +109,9 @@ export const PeoplePage: FunctionComponent<NewBillStackNavigationProps<
                     },
                 })
                 .then(({ data }) => {
-                    setResults(data)
+                    if (!data.error) {
+                        setResults(data)
+                    }
                 })
         }, 300)
     }
@@ -138,7 +131,7 @@ export const PeoplePage: FunctionComponent<NewBillStackNavigationProps<
                 }
             )
             .then(({ data }) => {
-                navigation.navigate("Bill", {
+                navigation.replace("Bill", {
                     id: data.id,
                 })
             })
@@ -157,12 +150,12 @@ export const PeoplePage: FunctionComponent<NewBillStackNavigationProps<
             <View>
                 <FlatList
                     data={state.users}
-                    renderItem={(item) => (
+                    renderItem={({ item }) => (
                         <Person
-                            name={item.item.name}
+                            user={item}
                             checked
                             onChange={(value) =>
-                                onPersonSelectChange(item.item, value)
+                                onPersonSelectChange(item, value)
                             }
                         />
                     )}
@@ -172,12 +165,12 @@ export const PeoplePage: FunctionComponent<NewBillStackNavigationProps<
 
                 <FlatList
                     data={deselectedUsers()}
-                    renderItem={(item) => (
+                    renderItem={({ item }) => (
                         <Person
-                            name={item.item.name}
+                            user={item}
                             checked={false}
                             onChange={(value) =>
-                                onPersonSelectChange(item.item, value)
+                                onPersonSelectChange(item, value)
                             }
                         />
                     )}

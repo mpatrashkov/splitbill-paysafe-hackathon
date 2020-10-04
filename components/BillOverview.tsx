@@ -6,11 +6,13 @@ import {
 } from "react-native-gesture-handler"
 import { Colours } from "../styles"
 import { BillPerson } from "./BillPerson"
+import { Bill } from "../types/bill"
 
 export const BillOverview: FunctionComponent<{
     style?: Record<string, unknown>
     onPress?: (ev: GestureResponderEvent) => void
-}> = ({ style, onPress }) => {
+    bill: Bill
+}> = ({ style, onPress, bill }) => {
     const people = [0, 1, 2, 3]
 
     return (
@@ -21,12 +23,12 @@ export const BillOverview: FunctionComponent<{
                 ...style,
             }}
         >
-            <Text>Food & Drinks for the week</Text>
+            <Text>{bill.name}</Text>
             <View style={styles.row}>
-                <Text style={styles.money}>$14.58</Text>
+                <Text style={styles.money}>{bill.amount}лв.</Text>
                 <View style={styles.people}>
-                    {people.map((person, index) => (
-                        <BillPerson key={index} />
+                    {bill.users.map((user, index) => (
+                        <BillPerson key={index} user={user} />
                     ))}
                 </View>
             </View>

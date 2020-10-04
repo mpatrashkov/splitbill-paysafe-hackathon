@@ -1,23 +1,62 @@
-import React, { FunctionComponent } from "react"
+import React, { FunctionComponent, useState, useEffect } from "react"
 import { View, Text, StyleSheet } from "react-native"
 import { Typography, Layout } from "../../../styles"
 import { BillOverview } from "../../BillOverview"
 import { CustomButton } from "../../CustomButton"
-import { ScrollView } from "react-native-gesture-handler"
+import { ScrollView, FlatList } from "react-native-gesture-handler"
+import { Bill } from "../../../types/bill"
+import { authHeaders } from "../../../lib/headers"
+import { splitBillApi } from "../../../http/splitBillApi"
+import { HomeTabsNavigationProps } from "../../../types/navigation"
 
-export const BillsPage: FunctionComponent = () => {
+export const BillsPage: FunctionComponent<HomeTabsNavigationProps<"Bills">> = ({
+    navigation,
+}) => {
+    const [activeBills, setActiveBills] = useState<Bill[]>([])
+    const [pastBills, setPastBills] = useState<Bill[]>([])
+
+    useEffect(() => {
+        authHeaders()
+            .then((headers) =>
+                splitBillApi.get("/bills", {
+                    headers,
+                })
+            )
+            .then(({ data }) => {
+                if (!data.error) {
+                    setActiveBills(data.activeBills)
+                    setPastBills(data.completedBills)
+                }
+            })
+    }, [])
+
+    const onNewBillClick = () => {
+        navigation.push("NewBill")
+    }
+
+    const onBillClick = (bill: Bill) => {
+        navigation.navigate("Bill", {
+            id: bill.id,
+        })
+    }
+
     return (
         <ScrollView>
             <View style={Layout.container}>
                 <View>
                     <Text style={Typography.sectionHeader}>Current Bills</Text>
-                    <BillOverview style={styles.bill} />
-                    <BillOverview style={styles.bill} />
-                    <BillOverview style={styles.bill} />
+                    {activeBills.map((bill) => (
+                        <BillOverview
+                            style={styles.bill}
+                            bill={bill}
+                            key={bill.id}
+                            onPress={() => onBillClick(bill)}
+                        />
+                    ))}
 
                     <CustomButton
                         colour="primary"
-                        onPress={() => {}}
+                        onPress={onNewBillClick}
                         text="New Bill"
                         style={styles.button}
                     />
@@ -25,12 +64,14 @@ export const BillsPage: FunctionComponent = () => {
 
                 <View>
                     <Text style={Typography.sectionHeader}>Past Bills</Text>
-                    <BillOverview style={styles.bill} />
-                    <BillOverview style={styles.bill} />
-                    <BillOverview style={styles.bill} />
-                    <BillOverview style={styles.bill} />
-                    <BillOverview style={styles.bill} />
-                    <BillOverview style={styles.bill} />
+                    {pastBills.map((bill) => (
+                        <BillOverview
+                            style={styles.bill}
+                            bill={bill}
+                            key={bill.id}
+                            onPress={() => onBillClick(bill)}
+                        />
+                    ))}
                 </View>
             </View>
         </ScrollView>

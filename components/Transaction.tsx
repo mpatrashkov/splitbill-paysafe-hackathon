@@ -2,11 +2,18 @@ import React, { FunctionComponent } from "react"
 import { View, StyleSheet, Text } from "react-native"
 import { Colours } from "../styles"
 import { BillPerson } from "./BillPerson"
+import { Transaction } from "../types/transaction"
 
-export const Transaction: FunctionComponent = () => {
+export const TransactionCard: FunctionComponent<{
+    transaction: Transaction
+}> = ({ transaction }) => {
     return (
         <View style={styles.container}>
-            <BillPerson style={styles.image} size={50} />
+            <BillPerson
+                style={styles.image}
+                size={50}
+                user={transaction.user}
+            />
             <View style={styles.name}>
                 <Text style={styles.title}>NETFLIX INC</Text>
                 <Text style={styles.amount}>14.05$</Text>
